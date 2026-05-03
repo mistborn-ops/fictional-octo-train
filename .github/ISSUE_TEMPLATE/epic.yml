@@ -1,0 +1,51 @@
+name: Epic
+description: Parent container for multi-issue work.
+title: "epic: <short description>"
+labels: ["type:epic", "needs-triage"]
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: What does this epic accomplish when complete?
+    validations:
+      required: true
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope (in / out)
+      placeholder: |
+        In scope:
+        Out of scope:
+    validations:
+      required: true
+
+  - type: textarea
+    id: child_issues
+    attributes:
+      label: Child issues
+      placeholder: |
+        - [ ] #
+        - [ ] #
+    validations:
+      required: false
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+    validations:
+      required: true
+
+  - type: dropdown
+    id: risk
+    attributes:
+      label: Risk level
+      options:
+        - low
+        - medium
+        - high
+        - critical
+    validations:
+      required: true

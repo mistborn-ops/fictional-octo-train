@@ -1,0 +1,91 @@
+name: PR Governance Gate
+
+on:
+  pull_request:
+    types: [opened, synchronize, labeled, unlabeled, reopened, edited]
+  issue_comment:
+    types: [created, edited]
+
+permissions:
+  issues: read
+  pull-requests: read
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enforce blocker freeze + triage acceptance gate
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+
+            let prNumber = null;
+            if (context.eventName === "pull_request") {
+              prNumber = context.payload.pull_request.number;
+            } else if (context.eventName === "issue_comment") {
+              if (!context.payload.issue?.pull_request) { core.notice("Not a PR comment — skipping."); return; }
+              prNumber = context.payload.issue.number;
+            } else { return; }
+
+            const pr = await github.rest.pulls.get({ owner, repo, pull_number: prNumber });
+            const prLabels = (pr.data.labels || []).map(l => l.name);
+            const prBody = (pr.data.body || "");
+
+            const TRUSTED = new Set(["OWNER", "MEMBER", "COLLABORATOR"]);
+
+            async function hasBreakGlassComment() {
+              const comments = await github.rest.issues.listComments({ owner, repo, issue_number: prNumber, per_page: 100 });
+              for (const c of comments.data) {
+                const idx = (c.body || "").indexOf("BREAK-GLASS:");
+                if (idx >= 0 && (c.body.slice(idx + 12).trim().length >= 10) && TRUSTED.has((c.author_association || "").toUpperCase())) return true;
+              }
+              return false;
+            }
+
+            // Gate 1: Blocker freeze
+            const blockersResult = await github.rest.search.issuesAndPullRequests({
+              q: `repo:${owner}/${repo} is:issue is:open label:gate:blocker`, per_page: 50
+            });
+            const blockers = blockersResult.data.items.filter(i => !i.pull_request);
+
+            if (blockers.length > 0) {
+              const examples = blockers.slice(0, 10).map(i => `#${i.number} ${i.title}`).join("\n");
+              if (prLabels.includes("gate:override")) {
+                if (!(await hasBreakGlassComment())) {
+                  core.setFailed(`Blocked: gate:blocker issues exist. Add PR comment: BREAK-GLASS: <reason>\n\n${examples}`);
+                  return;
+                }
+                core.notice("Break-glass accepted. ✅");
+              } else {
+                core.setFailed(`Blocked: ${blockers.length} open gate:blocker issue(s).\n\n${examples}`);
+                return;
+              }
+            }
+
+            // Gate 2: Issue link + triage acceptance
+            const closingRegex = /\b(?:close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved)\s+#(\d+)\b/gi;
+            const referenced = new Set([...prBody.matchAll(closingRegex)].map(m => Number(m[1])));
+
+            if (referenced.size === 0) {
+              core.setFailed("Blocked: every PR must close at least one issue using closing keywords (e.g. Closes #123).");
+              return;
+            }
+
+            const missing = [];
+            for (const n of referenced) {
+              const i = await github.rest.issues.get({ owner, repo, issue_number: n });
+              if (i.data.pull_request) continue;
+              const labels = new Set((i.data.labels || []).map(l => l.name));
+              if (labels.has("needs-template")) { core.setFailed(`Blocked: #${n} still has needs-template label.`); return; }
+              if (!labels.has("triage:accepted")) missing.push(`#${n} ${i.data.title}`);
+            }
+
+            if (missing.length > 0) {
+              core.setFailed(`Blocked: linked issue(s) not yet triage:accepted:\n${missing.join("\n")}`);
+              return;
+            }
+
+            core.notice("Governance gate passed. ✅");

@@ -1,0 +1,37 @@
+name: Task
+description: A concrete piece of work with a clear definition of done.
+title: "task: <short description>"
+labels: ["type:chore", "needs-triage"]
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+    validations:
+      required: true
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope (in / out)
+      placeholder: |
+        In scope:
+        Out of scope:
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Plan / steps
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: done
+    attributes:
+      label: Definition of done
+      options:
+        - label: Tests updated or added (or N/A and explained)
+        - label: Docs updated (or N/A and explained)
+        - label: Rollback plan documented (if mutating)

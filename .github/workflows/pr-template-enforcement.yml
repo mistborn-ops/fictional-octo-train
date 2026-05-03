@@ -1,0 +1,43 @@
+name: PR Template Enforcement
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+
+permissions:
+  pull-requests: read
+
+jobs:
+  validate-template:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR template compliance
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const branch = context.payload.pull_request.head.ref;
+            const body = context.payload.pull_request.body || "";
+
+            if (body.trim().length < 50) {
+              core.setFailed("PR body is too short. Please use one of the PR templates.");
+              return;
+            }
+
+            const isBreakGlass = branch.startsWith("chore/incident-") || branch.startsWith("hotfix/");
+            const hasBreakGlassSections =
+              body.includes("Incident Reference (REQUIRED)") &&
+              body.includes("Rollback Plan (REQUIRED)") &&
+              body.includes("Governance Acknowledgment (REQUIRED)");
+            const hasBreakGlassMarker = body.includes("Break-Glass PR");
+
+            if (isBreakGlass && !hasBreakGlassSections) {
+              core.setFailed("Incident/hotfix branch requires the break-glass PR template.");
+              return;
+            }
+
+            if (!isBreakGlass && hasBreakGlassMarker) {
+              core.setFailed("Break-glass template used on a non-incident branch.");
+              return;
+            }
+
+            core.notice("PR template check passed. ✅");

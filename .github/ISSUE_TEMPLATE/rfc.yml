@@ -1,0 +1,50 @@
+name: RFC (Request for Comments)
+description: Pre-work design discussion for architecture, tooling, or governance changes.
+title: "rfc: <short description>"
+labels: ["type:meta", "needs-triage"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem statement
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed approach
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+    validations:
+      required: true
+
+  - type: textarea
+    id: tradeoffs
+    attributes:
+      label: Tradeoffs
+    validations:
+      required: true
+
+  - type: textarea
+    id: open_questions
+    attributes:
+      label: Open questions
+    validations:
+      required: false
+
+  - type: dropdown
+    id: urgency
+    attributes:
+      label: Urgency
+      options:
+        - low (nice to have)
+        - medium (next cycle)
+        - high (blocking work)
+    validations:
+      required: true

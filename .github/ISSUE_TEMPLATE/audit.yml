@@ -1,0 +1,46 @@
+name: Audit / Review
+description: Formal analysis — security audit, architecture review, codebase health.
+title: "audit: <short description>"
+labels: ["type:meta", "needs-triage"]
+body:
+  - type: dropdown
+    id: audit_type
+    attributes:
+      label: Audit type
+      options:
+        - security
+        - architecture
+        - codebase health
+        - dependency
+        - governance / compliance
+        - other
+    validations:
+      required: true
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+    validations:
+      required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Why now?
+    validations:
+      required: true
+
+  - type: textarea
+    id: success
+    attributes:
+      label: Success criteria
+    validations:
+      required: true
+
+  - type: textarea
+    id: findings
+    attributes:
+      label: Findings (fill in after audit)
+    validations:
+      required: false

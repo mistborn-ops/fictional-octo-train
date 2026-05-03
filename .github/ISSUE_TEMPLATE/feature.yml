@@ -1,0 +1,54 @@
+name: Feature Request
+description: Propose a new capability or behavior.
+title: "feat: <short description>"
+labels: ["type:feature", "needs-triage"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+    validations:
+      required: false
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      placeholder: |
+        - [ ] ...
+        - [ ] ...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: risk
+    attributes:
+      label: Risk level
+      options:
+        - low
+        - medium
+        - high
+        - critical
+    validations:
+      required: true
+
+  - type: textarea
+    id: rollback
+    attributes:
+      label: Rollback / mitigation
+    validations:
+      required: true

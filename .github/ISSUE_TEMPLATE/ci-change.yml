@@ -1,0 +1,51 @@
+name: CI / Automation Change
+description: CI/CD workflow updates, pipeline changes, automation scripts.
+title: "ci: <short description>"
+labels: ["type:ci", "needs-triage"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What is changing?
+    validations:
+      required: true
+
+  - type: textarea
+    id: why
+    attributes:
+      label: Why?
+    validations:
+      required: true
+
+  - type: textarea
+    id: affected_workflows
+    attributes:
+      label: Affected workflows / pipelines
+    validations:
+      required: true
+
+  - type: dropdown
+    id: risk
+    attributes:
+      label: Risk level
+      options:
+        - low
+        - medium
+        - high
+    validations:
+      required: true
+
+  - type: textarea
+    id: rollback
+    attributes:
+      label: Rollback plan
+    validations:
+      required: true
+
+  - type: textarea
+    id: failure_scenarios
+    attributes:
+      label: Failure scenarios
+      description: What breaks if this goes wrong?
+    validations:
+      required: true

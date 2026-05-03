@@ -1,0 +1,26 @@
+name: Maintenance / Chore
+description: Dependency bumps, CI tweaks, repo hygiene.
+title: "chore: <short description>"
+labels: ["type:chore", "needs-triage"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What is being maintained?
+    validations:
+      required: true
+
+  - type: textarea
+    id: why
+    attributes:
+      label: Why now?
+      description: Security fix, deprecation, drift, simplifying ops, etc.
+    validations:
+      required: true
+
+  - type: textarea
+    id: risk
+    attributes:
+      label: Risk / rollback
+    validations:
+      required: true

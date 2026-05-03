@@ -1,0 +1,91 @@
+name: Issues Automation
+
+on:
+  issues:
+    types: [opened, edited, reopened]
+
+permissions:
+  issues: write
+
+jobs:
+  automate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Auto-label + template enforcement
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const issue = context.payload.issue;
+            const number = issue.number;
+            const title = (issue.title || "").trim();
+            const body = (issue.body || "").trim();
+            const existing = new Set((issue.labels || []).map(l => l.name));
+            const add = new Set();
+
+            // Title-prefix classification
+            const t = title.toLowerCase();
+            if (t.startsWith("feat(") || t.startsWith("feat:")) add.add("type:feature");
+            if (t.startsWith("fix(") || t.startsWith("fix:")) add.add("type:fix");
+            if (t.startsWith("docs(") || t.startsWith("docs:")) add.add("type:docs");
+            if (t.startsWith("refactor(") || t.startsWith("refactor:")) add.add("type:refactor");
+            if (t.startsWith("chore(") || t.startsWith("ci(") || t.startsWith("build(")) add.add("type:chore");
+            if (t.startsWith("ci:")) add.add("type:ci");
+            if (t.startsWith("sec(") || t.startsWith("security:")) add.add("type:security");
+            if (t.startsWith("epic:")) add.add("type:epic");
+            if (t.startsWith("rfc:")) add.add("type:meta");
+            if (t.startsWith("postmortem:") || t.startsWith("audit:")) add.add("type:meta");
+
+            // Body fingerprints
+            const b = body.toLowerCase();
+            if (b.includes("steps to reproduce") || b.includes("actual behavior")) add.add("type:fix");
+            if (b.includes("acceptance criteria") || b.includes("user story")) add.add("type:feature");
+            if (b.includes("maintenance") || b.includes("dependency bump")) add.add("type:chore");
+            if (b.includes("refactor") || b.includes("no behavior change")) add.add("type:refactor");
+            if (b.includes("affected workflows") || b.includes("affected pipelines")) add.add("type:ci");
+
+            // needs-triage if no type label
+            const typeLabels = [...add].filter(l => l.startsWith("type:"));
+            const hasType = typeLabels.length > 0 || [...existing].some(l => l.startsWith("type:"));
+            if (!hasType) add.add("needs-triage");
+
+            // Template quality gate
+            const tooShortTitle = title.length < 8;
+            const tooShortBody = body.length < 80;
+            const lacksHeadings = !(body.includes("###") || body.includes("##"));
+            const missingTemplate = tooShortTitle || tooShortBody || lacksHeadings;
+
+            const MARKER = "<!-- TEMPLATE-ENFORCEMENT -->";
+
+            async function commentExists() {
+              const comments = await github.rest.issues.listComments({
+                owner, repo, issue_number: number, per_page: 100
+              });
+              return comments.data.some(c => (c.body || "").includes(MARKER));
+            }
+
+            const toAdd = [...add].filter(l => !existing.has(l));
+            if (toAdd.length > 0) {
+              await github.rest.issues.addLabels({ owner, repo, issue_number: number, labels: toAdd });
+              core.notice(`Added labels: ${toAdd.join(", ")}`);
+            }
+
+            if (missingTemplate) {
+              if (!existing.has("needs-template")) {
+                await github.rest.issues.addLabels({ owner, repo, issue_number: number, labels: ["needs-template"] });
+              }
+              const already = await commentExists();
+              if (!already) {
+                await github.rest.issues.createComment({
+                  owner, repo, issue_number: number,
+                  body: `${MARKER}\nHi @${issue.user.login} — this issue is missing required details.\n\nPlease update using one of the issue templates. Minimum requirements:\n- Clear description (80+ chars)\n- At least one section heading\n\nOnce updated, the **needs-template** label can be removed.`
+                });
+              }
+            }
+
+            if (existing.has("triage:accepted") || add.has("triage:accepted")) {
+              if (existing.has("needs-triage")) {
+                await github.rest.issues.removeLabel({ owner, repo, issue_number: number, name: "needs-triage" });
+              }
+            }
