@@ -1,0 +1,29 @@
+name: Refactor
+description: Improve structure without changing behavior.
+title: "refactor: <short description>"
+labels: ["type:refactor", "needs-triage"]
+body:
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation
+      placeholder: "Reduce duplication, clarify contracts, improve testability, etc."
+    validations:
+      required: true
+
+  - type: textarea
+    id: constraints
+    attributes:
+      label: Constraints / invariants
+      placeholder: |
+        - Must remain idempotent
+        - No behavior change
+    validations:
+      required: true
+
+  - type: textarea
+    id: verification
+    attributes:
+      label: How will we verify no regression?
+    validations:
+      required: true

@@ -1,0 +1,26 @@
+name: Docs Request
+description: Improve or fix documentation.
+title: "docs: <short description>"
+labels: ["type:docs", "needs-triage"]
+body:
+  - type: textarea
+    id: gap
+    attributes:
+      label: What is unclear or missing?
+    validations:
+      required: true
+
+  - type: textarea
+    id: location
+    attributes:
+      label: Where (file, section, URL)?
+    validations:
+      required: false
+
+  - type: textarea
+    id: audience
+    attributes:
+      label: Intended audience
+      placeholder: "Future me / new contributor / etc."
+    validations:
+      required: false

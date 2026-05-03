@@ -1,0 +1,68 @@
+name: Bug Report
+description: Something is broken or behaving unexpectedly.
+title: "fix: <short description>"
+labels: ["type:fix", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **No secrets. No tokens. No IPs you don't want public.**
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction steps
+      placeholder: |
+        1. ...
+        2. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / output
+      render: shell
+    validations:
+      required: false
+
+  - type: dropdown
+    id: risk
+    attributes:
+      label: Risk level
+      options:
+        - low
+        - medium
+        - high
+        - critical
+    validations:
+      required: true
+
+  - type: textarea
+    id: rollback
+    attributes:
+      label: Rollback / mitigation
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: governance
+    attributes:
+      label: Governance
+      options:
+        - label: This is not a secret or vulnerability report.
+          required: true

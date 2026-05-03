@@ -1,0 +1,172 @@
+# ---
+# Shared label set — managed via labels-sync.yml
+# ---
+
+# ------------------------------
+# DEFAULT
+# ------------------------------
+- name: bug
+  description: Something isn't working
+  color: d73a4a
+- name: documentation
+  description: Improvements or additions to documentation
+  color: 0075ca
+- name: duplicate
+  description: This issue or pull request already exists
+  color: cfd3d7
+- name: enhancement
+  description: New feature or request
+  color: a2eeef
+- name: good first issue
+  description: Good for newcomers
+  color: 7057ff
+- name: help wanted
+  description: Extra attention is needed
+  color: 008672
+- name: invalid
+  description: This doesn't seem right
+  color: e4e669
+- name: question
+  description: Further information is requested
+  color: d876e3
+- name: wontfix
+  description: This will not be worked on
+  color: ffffff
+
+# ------------------------------
+# TYPE
+# ------------------------------
+- name: type:feature
+  description: New capability or behavior
+  color: 1d76db
+- name: type:fix
+  description: Bug fix
+  color: d73a4a
+- name: type:refactor
+  description: Internal change without behavior change
+  color: 5319e7
+- name: type:docs
+  description: Documentation
+  color: 0e8a16
+- name: type:chore
+  description: Maintenance / housekeeping
+  color: fbca04
+- name: type:ci
+  description: CI/CD pipeline changes
+  color: f9d0c4
+- name: type:security
+  description: Security hardening or risk reduction
+  color: b60205
+- name: type:ops
+  description: Operations / day-2 / maintainability
+  color: fbca04
+- name: type:epic
+  description: Parent container for multi-issue work
+  color: 3e4b9e
+- name: type:meta
+  description: RFC, ADR, postmortem, audit
+  color: cccccc
+- name: type:debt
+  description: Technical debt
+  color: e4e669
+- name: type:compliance
+  description: Governance / policy alignment
+  color: bfd4f2
+- name: type:deprecation
+  description: Removing or phasing out functionality
+  color: f9d0c4
+
+# ------------------------------
+# PRIORITY
+# ------------------------------
+- name: priority:critical
+  description: Drop everything
+  color: b60205
+- name: priority:high
+  description: High priority
+  color: d93f0b
+- name: priority:medium
+  description: Medium priority
+  color: fbca04
+- name: priority:low
+  description: Low priority
+  color: 0e8a16
+
+# ------------------------------
+# RISK
+# ------------------------------
+- name: risk:low
+  description: Low blast radius
+  color: 0e8a16
+- name: risk:medium
+  description: Medium blast radius
+  color: fbca04
+- name: risk:high
+  description: High blast radius
+  color: d93f0b
+- name: risk:critical
+  description: Critical blast radius
+  color: b60205
+
+# ------------------------------
+# STATUS
+# ------------------------------
+- name: status:blocked
+  description: Blocked by another issue
+  color: e11d48
+- name: status:needs-info
+  description: Waiting on more information
+  color: fef9c3
+- name: status:ready
+  description: Ready to be worked on
+  color: dcfce7
+- name: needs:review
+  description: Needs review
+  color: bfdbfe
+- name: needs:testing
+  description: Needs testing
+  color: fde68a
+- name: needs:decision
+  description: Needs a decision before proceeding
+  color: ddd6fe
+
+# ------------------------------
+# GOVERNANCE / AUTOMATION
+# ------------------------------
+- name: needs-triage
+  description: Awaiting initial classification
+  color: fef2c0
+- name: needs-template
+  description: Missing required issue template details
+  color: f9d0c4
+- name: triage:accepted
+  description: Issue reviewed and accepted
+  color: 0e8a16
+- name: gate:blocker
+  description: Blocks all PRs until resolved
+  color: "000000"
+- name: gate:override
+  description: Break-glass override for gate:blocker
+  color: ff00ff
+- name: chore
+  description: Chore / maintenance
+  color: fbca04
+
+# ------------------------------
+# AREA (fictional-octo-train)
+# ------------------------------
+- name: area:policy
+  color: c5def5
+  description: Policy enforcement
+- name: area:ci
+  color: c5def5
+  description: CI/CD workflows
+- name: area:docs
+  color: c5def5
+  description: Documentation
+- name: area:security
+  color: c5def5
+  description: Security
+- name: area:repo
+  color: c5def5
+  description: Repo configuration

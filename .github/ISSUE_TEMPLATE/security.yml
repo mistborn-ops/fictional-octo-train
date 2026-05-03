@@ -1,0 +1,52 @@
+name: Security Issue
+description: Security hardening, risk reduction, or vulnerability report.
+title: "sec: <short description>"
+labels: ["type:security", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ⚠️ **Do not include exploit details, credentials, or sensitive IPs in public issues.**
+        For confirmed vulnerabilities, use the private vulnerability reporting process.
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - low
+        - medium
+        - high
+        - critical
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Describe the security concern without exposing sensitive details.
+    validations:
+      required: true
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Impact
+    validations:
+      required: true
+
+  - type: textarea
+    id: mitigation
+    attributes:
+      label: Proposed mitigation
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: governance
+    attributes:
+      label: Governance
+      options:
+        - label: This does not contain credentials, tokens, or exploitable details.
+          required: true

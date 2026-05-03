@@ -1,0 +1,66 @@
+name: Postmortem
+description: After something breaks — root cause, detection gap, prevention.
+title: "postmortem: <short description>"
+labels: ["type:meta", "needs-triage"]
+body:
+  - type: input
+    id: date
+    attributes:
+      label: Incident date
+      placeholder: "YYYY-MM-DD"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - low
+        - medium
+        - high
+        - critical
+    validations:
+      required: true
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+    validations:
+      required: true
+
+  - type: textarea
+    id: timeline
+    attributes:
+      label: Timeline
+      placeholder: |
+        HH:MM - event
+        HH:MM - event
+    validations:
+      required: true
+
+  - type: textarea
+    id: root_cause
+    attributes:
+      label: Root cause
+    validations:
+      required: true
+
+  - type: textarea
+    id: detection_gap
+    attributes:
+      label: Detection gap
+      description: Why did this take as long as it did to detect?
+    validations:
+      required: true
+
+  - type: textarea
+    id: action_items
+    attributes:
+      label: Action items
+      placeholder: |
+        - [ ] #issue
+        - [ ] #issue
+    validations:
+      required: true

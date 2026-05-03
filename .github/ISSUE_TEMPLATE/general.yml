@@ -1,0 +1,25 @@
+name: General Issue
+description: Something that doesn't fit another template.
+title: "issue: <short description>"
+labels: ["needs-triage"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+    validations:
+      required: false
+
+  - type: textarea
+    id: next
+    attributes:
+      label: Proposed next step
+    validations:
+      required: false
